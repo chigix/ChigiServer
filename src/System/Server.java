@@ -50,13 +50,21 @@ public class Server implements Runnable{
         System.out.println("【~~千木服务器进程启动~~】");
         Settings.STATUS = 1;
         while (true) {
+            if (Settings.STATUS == 0) {
+                // 若当前服务器已停止，则跳出循环
+                break;
+            }
             System.out.println("等待客户端连接");
             Socket socket = null;
             try {
                 socket = this.server.accept();
             } catch (IOException ex) {
-                Logger.getLogger(Server.class.getName())
-                        .log(Level.SEVERE, "请求读取出错", ex);
+                // 判断当前服务器进程是否仍在运行
+                // 仅在运行期间才抛出读取异常
+                if (Settings.STATUS == 1) {
+                    Logger.getLogger(Server.class.getName())
+                            .log(Level.SEVERE, "请求读取出错", ex);
+                }
                 return ;
             }
             System.out.println("一个客户端已连接");

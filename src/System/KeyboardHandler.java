@@ -15,6 +15,7 @@ public class KeyboardHandler implements Runnable {
         Scanner input = new Scanner(System.in);
         Thread thread = null;
         while (true) {
+            System.out.print("Chigi>");
             String cmd = input.next();
             switch (cmd.toLowerCase()) {
                 case "exit":
