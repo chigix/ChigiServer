@@ -152,10 +152,6 @@ public class ClientHandler implements Runnable {
         this.writer.println("Content-Length: " + outputFile.lengthByte());
         this.writer.println("Connection: keep-alive");
         this.writer.println("Keep-Alive: timeout=5, max=99");
-        this.console.log(this.header.getUri(),this.header.getContentType());
-        this.console.log(this.header.getUri(),this.header.getExt());
-        this.console.log(this.header.getUri(),String.valueOf(this.header.getUri().lastIndexOf(".")));
-        this.console.log(this.header.getUri(),String.valueOf(this.header.getUri().length()));
         if (outputFile.getError() == null) {
             // 当前文件读取没有错误
             if (this.header.getContentType() != null && !this.header.getContentType().isEmpty()) {
