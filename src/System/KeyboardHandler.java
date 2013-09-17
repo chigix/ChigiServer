@@ -17,34 +17,36 @@ public class KeyboardHandler implements Runnable {
         while (true) {
             System.out.print("Chigi>");
             String cmd = input.next();
-            switch (cmd.toLowerCase()) {
-                case "exit":
-                    System.out.println("服务器运行结束\n退出");
-                    System.exit(0);
-                    break;
-                case "start":
-                    if (Settings.STATUS == 1) {
-                        System.out.println("当前已有一个正在运行的千木服务器进程。");
-                    }else{
+            synchronized (ConsoleHandler.TERMINAL) {
+                switch (cmd.toLowerCase()) {
+                    case "exit":
+                        this.showCmdMsg("服务器进程结束\n退出");
+                        System.exit(0);
+                        break;
+                    case "start":
+                        if (Settings.STATUS == 1) {
+                            this.showCmdMsg("当前已有一个正在运行的千木服务器进程");
+                        } else {
+                            thread = new Thread(Settings.SERVER);
+                            thread.start();
+                        }
+                        break;
+                    case "stop":
+                        if (Settings.STATUS == 0) {
+                            this.showCmdMsg("当前服务器进程已停止");
+                        } else {
+                            Settings.SERVER.stop();
+                        }
+                        break;
+                    case "restart":
+                        Settings.SERVER.stop();
                         thread = new Thread(Settings.SERVER);
                         thread.start();
-                    }
-                    break;
-                case "stop":
-                    if (Settings.STATUS == 0) {
-                        System.out.println("当前服务器进程已停止。");
-                    }else{
-                        Settings.SERVER.stop();
-                    }
-                    break;
-                case "restart":
-                    Settings.SERVER.stop();
-                    thread = new Thread(Settings.SERVER);
-                    thread.start();
-                    break;
-                case "help":
-                    KeyboardHandler.showHelp();
-                    break;
+                        break;
+                    case "help":
+                        KeyboardHandler.showHelp();
+                        break;
+                }
             }
         }
     }
@@ -58,6 +60,11 @@ public class KeyboardHandler implements Runnable {
         System.out.println(" start：  启动服务器。");
         System.out.println(" stop：   暂停服务器进程。");
         System.out.println(" restart：重启服务器。");
+        System.out.println("================================");
+    }
+
+    private void showCmdMsg(String msg) {
+        System.out.println(" " + msg.replaceAll("\n", "\n "));
         System.out.println("================================");
     }
 }

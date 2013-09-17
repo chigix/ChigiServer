@@ -36,6 +36,7 @@ public class Server implements Runnable{
     @Override
     public void run() {
         Settings.init();
+        ConsoleHandler console = new ConsoleHandler();
         this.threadPool = Executors.newCachedThreadPool();
         try {
             this.server = new ServerSocket(Settings.PORT);
@@ -47,14 +48,15 @@ public class Server implements Runnable{
             }
             return;
         }
-        System.out.println("【~~千木服务器进程启动~~】");
+        console.log("千木服务器进程启动");
+        console.print();
+        System.out.print("Chigi>");
         Settings.STATUS = 1;
         while (true) {
             if (Settings.STATUS == 0) {
                 // 若当前服务器已停止，则跳出循环
                 break;
             }
-            System.out.println("等待客户端连接");
             Socket socket = null;
             try {
                 socket = this.server.accept();
@@ -67,7 +69,6 @@ public class Server implements Runnable{
                 }
                 return ;
             }
-            System.out.println("一个客户端已连接");
             this.threadPool.execute(new ClientHandler(socket));
         }
     }

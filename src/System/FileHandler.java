@@ -4,7 +4,6 @@ import java.io.BufferedInputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -19,7 +18,18 @@ public class FileHandler {
 
     private String error = null;
     private ArrayList<Integer> data = null;
+    /**
+     * MIME 类型
+     */
+    private String mime = "text/html";
 
+    /**
+     * 直接根据报头对象 自动创建 文件控制对象
+     * @param headerObj 
+     */
+    public FileHandler(Header headerObj){
+        this(Settings.DEFAULT_PATH + headerObj.getScriptPath());
+    }
     /**
      * 带指定路径参数构造
      *
@@ -73,7 +83,6 @@ public class FileHandler {
      * 获取当前文件对象的输出数据的字节长度
      *
      * @return
-     * @throws UnsupportedEncodingException
      */
     public int lengthByte() {
         if (this.error != null) {
